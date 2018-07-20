@@ -21,6 +21,9 @@ import de.unidue.langtech.teaching.type.RawTweet;
 public class Printer extends JCasAnnotator_ImplBase {
 	// int i = 0;
 
+	private long counterAus = 0;
+	private long counterUK = 0;
+
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		// This method is called for each Tweet the reader reads
@@ -76,12 +79,15 @@ public class Printer extends JCasAnnotator_ImplBase {
 			localDate = date.plusHours(10).toLocalDate();
 			addToTreeMaps(localDate, wordValues, Run.dayAddedValuePairsAustralia, Run.dayTweetCounterAustralia);
 			System.out.println(date.plusHours(10));
+			System.out.println("Aus counter: " + ++counterAus);
 		} else {
 			localDate = date.plusHours(1).toLocalDate();
 			addToTreeMaps(localDate, wordValues, Run.dayAddedValuePairsUnitedKingdom, Run.dayTweetCounterUnitedKingdom);
 			System.out.println(date.plusHours(1));
+			System.out.println("UK counter: " + ++counterUK);
 		}
 
+		
 		System.out.println(localDate);
 		System.out.println(wordValues);
 	}
@@ -119,7 +125,7 @@ public class Printer extends JCasAnnotator_ImplBase {
 		for (Token token : tokens) {
 			tokenValue = Run.wordValuePairs.get(token.getCoveredText().toLowerCase());
 			if (tokenValue != null && tokenValue.floatValue() >= 1 && tokenValue.floatValue() <= 9
-			// && (tokenValue.floatValue() < 4 || tokenValue.floatValue() > 6)
+			 && (tokenValue.floatValue() < 4 || tokenValue.floatValue() > 6)
 			) {
 				valuesOfSingleWords.add(tokenValue.floatValue());
 			}
