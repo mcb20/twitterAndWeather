@@ -26,6 +26,8 @@ public class Run {
 	public static TreeMap<LocalDate, Integer> dayTweetCounterUnitedKingdom = new TreeMap<>();
 	public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy",
 			Locale.ENGLISH);
+	public static int counterAus = 0;
+	public static int counterUK = 0;
 
 	public static void main(String[] args) throws Exception {
 		String inputFolder = "src/main/resources/sample";
@@ -59,18 +61,21 @@ public class Run {
 
 		SimplePipeline.runPipeline(reader, tokenizer, printer);
 
+		
 		try {
 			safeHappinessDataInTxt();
 		} catch (IOException e) {
 			System.err.println("Error while writing Australia and UK files");
 		}
-		System.err.println("Schabe pfertisch!");
+		System.out.println("Australien: " + counterAus);
+		System.out.println("Vereinigtes Königreich: " + counterUK);
+		System.err.println("Fertig.");
 	}
 
 	public static void safeHappinessDataInTxt() throws IOException {
 
 		BufferedWriter wordsOutAustralia = new BufferedWriter(
-				new FileWriter("src/main/resources/happiness-values/australiaTimeZonedNoLens.txt"));
+				new FileWriter("src/main/resources/happiness-values/australiaTimeZoned1Lens.txt"));
 		for (Map.Entry<LocalDate, Float> entry : dayAddedValuePairsAustralia.entrySet()) {
 			wordsOutAustralia.write(
 					entry.getKey().toString() + " " + entry.getValue() / dayTweetCounterAustralia.get(entry.getKey()));
@@ -79,7 +84,7 @@ public class Run {
 		wordsOutAustralia.close();
 
 		BufferedWriter wordsOutUnitedKingdom = new BufferedWriter(
-				new FileWriter("src/main/resources/happiness-values/ukTimeZonedNoLens.txt"));
+				new FileWriter("src/main/resources/happiness-values/ukTimeZoned1Lens.txt"));
 		for (Map.Entry<LocalDate, Float> entry : dayAddedValuePairsUnitedKingdom.entrySet()) {
 			wordsOutUnitedKingdom.write(entry.getKey().toString() + " "
 					+ entry.getValue() / dayTweetCounterUnitedKingdom.get(entry.getKey()));

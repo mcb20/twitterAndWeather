@@ -19,25 +19,13 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unidue.langtech.teaching.type.RawTweet;
 
 public class Printer extends JCasAnnotator_ImplBase {
-	// int i = 0;
 
-	private long counterAus = 0;
-	private long counterUK = 0;
+	
+	private static final LocalDate FIRST_OF_MAY = LocalDate.of(2017, 5, 1);
+	private static final LocalDate SIXTEENTH_OF_MAY = LocalDate.of(2017, 5, 16);
 
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
-		// This method is called for each Tweet the reader reads
-		// printRaw(aJCas);
-		// i++;
-		// if(i>10000) {
-		// try {
-		// System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-		// Run.safeHappinessDataInTxt();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
 
 		RawTweet raw = JCasUtil.selectSingle(aJCas, RawTweet.class);
 		String rawTweet = raw.getRawTweet();
@@ -79,15 +67,22 @@ public class Printer extends JCasAnnotator_ImplBase {
 			localDate = date.plusHours(10).toLocalDate();
 			addToTreeMaps(localDate, wordValues, Run.dayAddedValuePairsAustralia, Run.dayTweetCounterAustralia);
 			System.out.println(date.plusHours(10));
-			System.out.println("Aus counter: " + ++counterAus);
+			
+			if(localDate.isAfter(FIRST_OF_MAY) && localDate.isBefore(SIXTEENTH_OF_MAY)) {
+				System.out.println("Aus counter: " + ++Run.counterAus);
+			}
+			
 		} else {
 			localDate = date.plusHours(1).toLocalDate();
 			addToTreeMaps(localDate, wordValues, Run.dayAddedValuePairsUnitedKingdom, Run.dayTweetCounterUnitedKingdom);
 			System.out.println(date.plusHours(1));
-			System.out.println("UK counter: " + ++counterUK);
+			
+			if(localDate.isAfter(FIRST_OF_MAY) && localDate.isBefore(SIXTEENTH_OF_MAY)) {
+				System.out.println("UK counter: " + ++Run.counterUK);
+			}
+			
 		}
 
-		
 		System.out.println(localDate);
 		System.out.println(wordValues);
 	}
@@ -133,5 +128,4 @@ public class Printer extends JCasAnnotator_ImplBase {
 		}
 		return valuesOfSingleWords;
 	}
-
 }
